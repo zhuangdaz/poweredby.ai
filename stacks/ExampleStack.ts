@@ -1,5 +1,19 @@
-import { StackContext } from "sst/constructs";
+import { NextjsSite, StackContext, Table } from "sst/constructs";
 
 export function ExampleStack({ stack }: StackContext) {
-  // Add your first construct
+  // const table = new Table(stack, "Products", {
+  //   fields: {
+  //     counter: "string",
+  //   },
+  //   primaryIndex: { partitionKey: "counter" },
+  // });
+
+  const site = new NextjsSite(stack, "Site", {
+    path: "frontend/",
+  });
+
+  // Add the site's URL to stack output
+  stack.addOutputs({
+    URL: site.url || "localhost",
+  });
 }
