@@ -1,13 +1,54 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next'
+import Airtable from "airtable";
+import type { NextApiRequest, NextApiResponse } from "next";
 
-type Data = {
-  name: string
+Airtable.configure({
+  endpointUrl: "https://api.airtable.com",
+  apiKey: process.env.AIRTABLE_API_KEY,
+});
+
+const base: Airtable.Base = Airtable.base(process.env.AIRTABLE_BASE_ID!);
+
+export interface Product {
+  name: string;
+  link: string;
+  postedAt: Date;
+  tags: string[];
 }
-
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<Product[]>
 ) {
-  res.status(200).json({ name: 'John Doe' })
+  const products: Product[] = await new Promise((resolve, reject) => {
+    const products: any[] = [];
+    const select = {
+      filterByFormula: ``,
+      offset: 0,
+    };
+
+    base("Products")
+      .select(select)
+      .eachPage(
+        (records, fetchNextPage) => {
+          records.map((record) => {
+            products.push({
+              name: record.get("Name"),
+              link: record.get("Link") || null,
+              postedAt: record.get("PostedAt"),
+              tags: record.get("Tags") || [],
+            });
+          });
+          fetchNextPage();
+        },
+        function done(err) {
+          if (err) {
+            console.error(err);
+            reject();
+            return;
+          }
+
+          resolve(products);
+        }
+      );
+  });
+  res.status(200).json(products);
 }
