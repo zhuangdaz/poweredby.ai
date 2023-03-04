@@ -1,5 +1,4 @@
-import { NextjsSite, StackContext, Table } from "sst/constructs";
-import { StringParameter } from "aws-cdk-lib/aws-ssm";
+import { NextjsSite, StackContext } from "sst/constructs";
 
 export function ExampleStack({ stack }: StackContext) {
   // const table = new Table(stack, "Products", {

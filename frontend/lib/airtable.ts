@@ -1,5 +1,4 @@
-import Airtable from "airtable";
-import type { NextApiRequest, NextApiResponse } from "next";
+import Airtable, { Attachment } from "airtable";
 
 Airtable.configure({
   endpointUrl: "https://api.airtable.com",
@@ -11,13 +10,15 @@ const base: Airtable.Base = Airtable.base(process.env.AIRTABLE_BASE_ID!);
 export interface Product {
   name: string;
   link: string;
-  postedAt: Date;
+  creator: string;
+  summary: string;
+  description: string;
+  images: string[];
+  postedAt?: Date;
   tags: string[];
 }
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Product[]>
-) {
+
+async function getAllProducts() {
   const products: Product[] = await new Promise((resolve, reject) => {
     const products: any[] = [];
     const select = {
@@ -25,16 +26,24 @@ export default async function handler(
       offset: 0,
     };
 
-    base("Products")
+    base("products")
       .select(select)
       .eachPage(
         (records, fetchNextPage) => {
           records.map((record) => {
+            let attachments: Attachment[] = record.get(
+              "images"
+            ) as Attachment[];
+
             products.push({
-              name: record.get("Name"),
-              link: record.get("Link") || null,
-              postedAt: record.get("PostedAt"),
-              tags: record.get("Tags") || [],
+              name: record.get("name"),
+              link: record.get("link") || null,
+              creator: record.get("creator") || null,
+              summary: record.get("summary") || null,
+              description: record.get("description") || null,
+              images: attachments.map((img) => img.url) || [],
+              postedAt: record.get("postedAt"),
+              tags: record.get("tags") || [],
             });
           });
           fetchNextPage();
@@ -50,5 +59,8 @@ export default async function handler(
         }
       );
   });
-  res.status(200).json(products);
+
+  return products;
 }
+
+export { getAllProducts };
