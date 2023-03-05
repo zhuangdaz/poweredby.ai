@@ -1,11 +1,12 @@
+import OverlaySuggestion from '@/components/Overlay/OverlaySuggestion';
 import ProductList from '@/components/ProductList';
 import SimpleSidebar from '@/components/Sidebar';
+import SubmitButton from '@/components/SubmitButton';
 import { getAllProducts, Product } from '@/lib/airtable';
-
+import { useDisclosure } from '@chakra-ui/react';
 
 export async function getStaticProps() {
   const products = await getAllProducts();
-  // console.log(`products: ${JSON.stringify(products)}`);
   return {
     props: {
       products,
@@ -14,18 +15,19 @@ export async function getStaticProps() {
   };
 }
 
-export type Sort = "Latest" | "Earliest";
-
 interface HomeProps {
   products: Product[];
 }
 
 export default function Home({ products }: HomeProps) {
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
     <>
       <SimpleSidebar>
+        <SubmitButton onClick={onOpen} />
         <ProductList products={products} />
+        <OverlaySuggestion isOpen={isOpen} onClose={onClose} />
       </SimpleSidebar>
     </>
   );

@@ -31,7 +31,6 @@ interface LinkItemProps {
 const LinkItems: Array<LinkItemProps> = [
   { name: 'Home', icon: FiHome },
   { name: 'Jobs', icon: FiSmile },
-  { name: 'Suggestions', icon: FiStar },
 ];
 
 export default function SimpleSidebar({ children }: { children: ReactNode }) {
@@ -69,34 +68,36 @@ interface SidebarProps extends BoxProps {
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   return (
-    <Flex
+    <Box
       bg={useColorModeValue('white', 'dark_grey')}
       borderRight="1px"
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
       w={{ base: 'full', md: 60 }}
       pos="fixed"
       h="full"
-      direction={'column'}
       {...rest}>
-      <Box>
-        <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-          <Text fontSize="xl" fontFamily="monospace" fontWeight="bold">
-            poweredby.ai
+      <Flex direction={'column'} h="full">
+        <Box>
+          <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
+            <Text fontSize="xl" fontFamily="monospace" fontWeight="bold">
+              poweredby.ai
+            </Text>
+            <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
+          </Flex>
+          {LinkItems.map((link) => (
+            <NavItem key={link.name} icon={link.icon} fontSize="l" fontFamily="monospace" fontWeight="bold">
+              {link.name}
+            </NavItem>
+          ))}
+        </Box>
+        <Spacer />
+        <Box padding="2rem">
+          <Text fontSize="xs" fontFamily="monospace">
+            poweredby.ai is a curated list of exciting products powered by AI. this site is still in its early stage. appreciate suggestions and feedback of all kinds!
           </Text>
-          <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
-        </Flex>
-        {LinkItems.map((link) => (
-          <NavItem key={link.name} icon={link.icon} fontSize="l" fontFamily="monospace" fontWeight="bold">
-            {link.name}
-          </NavItem>
-        ))}
-      </Box>
-      <Box>
-        <Text fontSize="xs" fontFamily="monospace">
-          poweredby.ai is a feed of exciting products powered by AI. this site is still in its early stage. please send suggestions and feedback!
-        </Text>
-      </Box>
-    </Flex >
+        </Box>
+      </Flex>
+    </Box >
   );
 };
 

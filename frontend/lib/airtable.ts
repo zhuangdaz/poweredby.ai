@@ -63,4 +63,34 @@ async function getAllProducts() {
   return products;
 }
 
-export { getAllProducts };
+export interface Submission {
+  name: string;
+  link: string;
+  description: string;
+  email: string;
+}
+
+async function sendSubmission({ name, link, description, email }: Submission) {
+  const response = await new Promise((resolve, reject) => {
+    const submittedAt = new Date().toISOString();
+    base("submissions").create(
+      [
+        {
+          fields: { name, link, description, email, submittedAt },
+        },
+      ],
+      (err, records) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        resolve(records?.map((r) => r.id));
+      }
+    );
+  });
+  console.log(`sendSubmission response: ${JSON.stringify(response)}`);
+  return response;
+}
+
+export { getAllProducts, sendSubmission };
