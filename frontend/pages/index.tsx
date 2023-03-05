@@ -1,9 +1,9 @@
-import OverlaySuggestion from '@/components/Overlay/OverlaySuggestion';
-import ProductList from '@/components/ProductList';
-import SimpleSidebar from '@/components/Sidebar';
-import SubmitButton from '@/components/SubmitButton';
-import { getAllProducts, Product } from '@/lib/airtable';
-import { useDisclosure } from '@chakra-ui/react';
+import OverlaySuggestion from "@/components/Overlay/OverlaySuggestion";
+import ProductList from "@/components/ProductList";
+import SimpleSidebar from "@/components/Sidebar";
+import SubmitButton from "@/components/SubmitButton";
+import { getAllProducts, Product } from "@/lib/airtable";
+import { useDisclosure } from "@chakra-ui/react";
 
 export async function getStaticProps() {
   const products = await getAllProducts();
@@ -20,7 +20,7 @@ interface HomeProps {
 }
 
 export default function Home({ products }: HomeProps) {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <>

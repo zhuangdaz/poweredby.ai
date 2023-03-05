@@ -19,7 +19,6 @@ import {
   FiHome,
   FiMenu,
   FiSmile,
-  FiStar,
 } from 'react-icons/fi';
 import { IconType } from 'react-icons';
 import { ReactText } from 'react';
