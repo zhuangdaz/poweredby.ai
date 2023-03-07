@@ -109,7 +109,7 @@ export default function OverlaySuggestion({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent bg="dark_grey" maxW="sm" p="1rem">
+      <ModalContent bg="black" maxW="sm" p="1rem">
         <ModalHeader>Recommend a product</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
