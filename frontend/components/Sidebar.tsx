@@ -18,7 +18,6 @@ import {
 import {
   FiHome,
   FiMenu,
-  FiSmile,
 } from 'react-icons/fi';
 import { IconType } from 'react-icons';
 import { ReactText } from 'react';
