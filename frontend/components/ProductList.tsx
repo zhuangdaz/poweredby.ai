@@ -14,6 +14,7 @@ import {
   useColorModeValue,
   Wrap,
   WrapItem,
+  AspectRatio,
 } from "@chakra-ui/react";
 import React from "react";
 import { BsStars } from "react-icons/bs";
@@ -28,7 +29,7 @@ const ProductTags: React.FC<IProductTags> = (props) => {
     <HStack spacing={2} marginTop={props.marginTop}>
       {props.tags.map((tag) => {
         return (
-          <Tag size={"md"} variant="solid" colorScheme="facebook" key={tag}>
+          <Tag key={tag} textAlign="center" px="1.5">
             {tag}
           </Tag>
         );
@@ -46,15 +47,16 @@ export const ProductCreator: React.FC<ProductCreatorProps> = (props) => {
   return (
     <HStack
       marginTop="2"
-      spacing="2"
+      spacing="1"
       display="flex"
       alignItems="center"
-      fontSize="sm"
+      fontSize="xs"
+      color="gray"
     >
-      <Text fontSize="xs">By </Text>
-      <Text fontWeight="medium">{props.name}</Text>
-      <Text> {props.date.toLocaleDateString()}</Text>
-    </HStack>
+      <Text>By</Text>
+      <Text>{props.name}</Text>
+      <Text>{props.date.toLocaleDateString()}</Text>
+    </HStack >
   );
 };
 
@@ -80,19 +82,22 @@ const ProductList = ({ products }: ProductListProps) => {
           position="relative"
           alignItems="center"
         >
-          <Box
-            width={{ base: "100%", sm: "85%" }}
-            zIndex="2"
-            marginLeft={{ base: "0", sm: "5%" }}
-            marginTop="5%"
-          >
-            <Image
-              borderRadius="lg"
-              src={featuredProduct.images[0]}
-              alt="alt"
-              objectFit="contain"
-            />
-          </Box>
+          <AspectRatio ratio={4 / 3}>
+            <Box
+              width={{ base: "100%", sm: "85%" }}
+              zIndex="2"
+              marginLeft={{ base: "0", sm: "5%" }}
+              marginTop="5%"
+              bg="white"
+            >
+              <Image
+                borderRadius="lg"
+                src={featuredProduct.images[0]}
+                alt="alt"
+                objectFit="contain"
+              />
+            </Box>
+          </AspectRatio>
           <Box zIndex="1" width="100%" position="absolute" height="100%">
             <Box
               bgGradient={useColorModeValue(
@@ -119,6 +124,7 @@ const ProductList = ({ products }: ProductListProps) => {
             py="8px"
             px="16px"
             justifyContent="space-between"
+            rounded="sm"
           >
             <Icon
               mr="2"
@@ -171,8 +177,8 @@ const ProductList = ({ products }: ProductListProps) => {
             width={{ base: "100%", sm: "45%", md: "45%", lg: "30%" }}
           >
             <Box w="100%">
-              <Box borderRadius="lg" overflow="hidden">
-                <Link textDecoration="none" _hover={{ textDecoration: "none" }}>
+              <AspectRatio ratio={1 / 1}>
+                <Box borderRadius="md" overflow="hidden" bg="white">
                   <Image
                     transform="scale(1.0)"
                     src={product.images[0]}
@@ -184,21 +190,21 @@ const ProductList = ({ products }: ProductListProps) => {
                       transform: "scale(1.05)",
                     }}
                   />
-                </Link>
-              </Box>
-              <ProductTags tags={product.tags} marginTop="3" />
+                </Box>
+              </AspectRatio>
               <Heading fontSize="l" marginTop="2">
                 <Link textDecoration="none" _hover={{ textDecoration: "none" }}>
                   {product.name}
                 </Link>
               </Heading>
-              <Text as="p" fontSize="sm" marginTop="2" lineHeight="1.25">
-                {product.summary}
-              </Text>
               <ProductCreator
                 name={product.creator}
                 date={new Date(product?.postedAt!)}
               />
+              <Text as="p" fontSize="sm" marginTop="2" lineHeight="1.25">
+                {product.summary}
+              </Text>
+              <ProductTags tags={product.tags} marginTop="3" />
             </Box>
           </WrapItem>
         ))}
